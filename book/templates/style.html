@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    {% load static %}<link rel="stylesheet" href="{% static "css/style.css" %}">    
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+            {% load static %} <img style="margin-left: 10px;margin-right: 5px" src="{% static "images/open-book-with-text-lines.png" %}" alt="Hi!" />
+            <h4 class="my-0 mr-md-auto font-weight-normal"><a class="text-dark" href="{% url 'home' %}">L1brary</a></h5>
+            <span style="padding-left:5px;"> Hello, {{ request.user.first_name|default:"guest" }}
+                {% if request.user.is_authenticated %}
+                    <a style="position: relative;" href="{% url 'logout' %}">Logout</a>
+                {% endif %} 
+            </span>   
+            <span style="padding: 5px 10px; margin-top:-5px"> || </span>
+            <nav class="my-2 my-md-0 mr-md-3">
+                {% if request.user.is_authenticated == 0 %}
+                    <a class="p-2 text-dark" href="{% url 'login' %}">Login</a>
+                    <a class="p-2 text-dark" href="{% url 'registration' %}">Registration</a>
+                {% else %}
+                    <a class="btn btn-outline-primary" href="{% url 'addOrders' %}">Orders</a>
+                    <a class="p-2 text-dark" href="{% url 'addBooks' %}">Books</a>
+                    <a class="p-2 text-dark" href="{% url 'addAuthors' %}">Authors</a>
+                {% endif %}  
+                <a class="p-2 text-dark" href="{% url 'home' %}">List</a>
+
+
+
+            </nav>
+        </div>
+    </header>
+    <main role="main">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="notification alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% else %}
+                        <div class="notification alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+          <span class="text-muted">Project Library@</span>
+        </div>
+      </footer>
+</body>
+<script>
+    function updateTransition() {
+        var el = document.querySelector("div.notification ");
+        el.className = "notification notification-hover";
+}
+var intervalID = window.setInterval(updateTransition, 3000);</script> 
+</script>
+</html>

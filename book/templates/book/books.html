@@ -1,0 +1,121 @@
+{% extends 'style.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<h1>{{title}}</h1><br>
+<form class="needs-validation" method="POST" novalidate="">
+  {% csrf_token %}
+  <div class="row">
+  <div class="col-7">
+  <label for="inlineFormInput">Book name:</label>
+
+  <div class="form-row align-items-center">
+    <div class="col-8">
+      <input type="text" name="name" maxlength="128" class="form-control mb-2" id="inlineFormInput" >
+    </div>
+    <div class="col-4">
+      <label class="sr-only" for="inlineFormInputGroup">Book name</label>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Counts</div>
+        </div>
+        <input type="text" name="count" class="form-control" value="10" id="inlineFormInputGroup" >
+      </div>
+    </div>
+    <div class="col-12">
+      <label for="lastName">Description: <span class="text-muted">(optional)</span></label>
+      <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="5"></textarea>
+    </div>
+  </div>
+</div>
+<div class="col-5">
+  <label class="mr-sm-2" for="inlineFormCustomSelect">Authors:</label>
+  <input type="hidden" name="counts" value="1" />
+   <div class="form-group"  id="field">
+    {% if Authors %}  
+          <select class="input form-control" style="width: 80%; display: inline-block;" id="field1" name="author-1">
+                      <option>None </option>
+                {% for el in Authors %}      
+                      <option value='{{ el.id  }}'>Name: {{ el.name}} {{ el.surname }}. Patronymic: {{ el.patronymic }} </option>
+                {% endfor %}
+          </select>   
+    {% else %}
+          <option> У базі не має авторів</option>      
+    {% endif %}
+    <button type="submit" class="btn add-more btn-primary b_author" style="width: 15%; display: inline-block;">+</button>
+
+  </div>
+  <input type="hidden" name="form_type" value="formAdd">
+  <button class="btn btn-primary btn-lg btn-block" style="max-width: 200px; margin:auto" type="submit">Add Book</button>
+</div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    var next = 1;
+    $(".add-more").click(function(e){
+        e.preventDefault();
+        var addto = "#field" + next;
+        var addRemove = "#field" + (next);
+        next = next + 1;
+        var newIn = '{% if Authors %} <select class="input form-control" style="width: 80%; display: inline-block;" id="field' + next + '" name="author-' + next + '"> {% for el in Authors %} <option value="{{ el.id  }}">Name: {{ el.name}} {{ el.surname }}. Patronymic: {{ el.patronymic }} </option> {% endfor %}</select>   {% else %}<option> У базі не має авторів</option> {% endif %}';
+        var newInput = $(newIn);
+        var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me b_author" style="width: 15%; margin-left:5px">-</button></div><div id="field">';
+        var removeButton = $(removeBtn);
+        $(addto).after(newInput);
+        $(addRemove).after(removeButton);
+        $("#field" + next).attr('data-source',$(addto).attr('data-source'));
+        $("#counts").val(next);  
+        
+            $('.remove-me').click(function(e){
+                e.preventDefault();
+                var fieldNum = this.id.charAt(this.id.length-1);
+                var fieldID = "#field" + fieldNum;
+                $(this).remove();
+                $(fieldID).remove();
+            });
+    });   
+});
+</script>
+</form><br>
+<h2>List:</h2>
+<br>
+{% if Book %}  
+    <table style="width: 100%; margin: auto;">
+            <tr style="border-bottom: 1px dotted grey;">
+                <td class="tr_1">Book name</td>
+                <td class="tr_2">Count</td>
+                <td class="tr_3">Authors</td>
+                <td>Description</td>
+            </tr>
+            {% for el in Book %}
+            <form method="POST">  
+                {% csrf_token %}
+                <tr style="padding:10px;border-bottom: 1px dotted rgb(77, 77, 77);">
+                    <td class="tr_1">{{ el.name }}</td>
+                    <td class="tr_2">{{ el.count }}</td>
+                    <td class="tr_3">
+                      {% for auth in el.authors.all %} 
+                        {% for pos in Authors %}
+                          {% if auth.id == pos.id %} 
+                            <span >Name: {{ pos.name}} {{ pos.surname }}. Patronymic: {{ pos.patronymic }}</span><br>     
+                          {% endif %}
+                        {% endfor %}
+                      {% endfor %}
+                    </td>
+                    <td>{{ el.description }}</td>
+                    <td style="width:100px"><button class="btn btn-danger btn-sm btn-block" name="delete_items" type="submit">Delete</div></td>
+                </tr>
+                <input type="hidden" name="id" value="{{ el.id }}">
+                <input type="hidden" name="form_type" value="formDel">
+            </form> 
+            {% endfor %}
+    </table>    
+{% else %}
+        <p style="color:red"> У списку не має записаних книг </p>       
+        {% endif %}
+
+{% endblock %}

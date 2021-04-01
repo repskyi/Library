@@ -1,0 +1,15 @@
+{% extends 'style.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+
+<form style="max-width: 400px;padding-top: 10%; margin: auto;" method="POST" class="form-signin">
+  <h1 style="text-align: center;">{{title}}</h1><br>
+    {% csrf_token %}
+    {{ form.as_p }}<br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+{% endblock %}

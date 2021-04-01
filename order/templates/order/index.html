@@ -1,0 +1,42 @@
+{% extends 'style.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+ 
+<h1>{{title}}</h1><br>
+{% if Order %}  
+    <table style="width: 100%; margin: auto;">
+            <tr style="border-bottom: 1px dotted grey;">
+                <td class="tr_4" style="text-align: center;">USER</td>
+                <td class="tr_1" style="text-align: center;">BOOKS</td>
+                <td>end_at</td>
+                <td>plated_end_at</td>
+                <td>created_at</td>
+            </tr>
+            {% for el in Order %}
+            <form method="POST">  
+                {% csrf_token %}
+                <tr style="padding:10px;border-bottom: 1px dotted grey; {% if el.end_at %}background-color: #a1ff9e !important;{% endif %} ">
+                    <td class="tr_4" style="width:20%"><span></span>Email:{{ el.user.email }}<br>
+                    <span>Name: {{ el.user.first_name }}  {{ el.user.second_name }}  {{ el.user.middle_name }}</span>
+                    </td>
+                    <td class="tr_1" style="width:20%">{{ el.book.name }}</td>
+                    <td style="width:20%">{{ el.end_at }}</td>
+                    <td style="width:20%">{{ el.plated_end_at }}</td>
+                    <td style="width:20%">{{ el.created_at }}</td>
+                    <td style="width:100px"><button class="btn btn-warning btn-sm btn-block" name="delete_items" type="submit" {% if el.end_at %}disabled{% endif %}>Confirm</div></td>
+                </tr>
+                <input type="hidden" name="id" value="{{ el.id }}">
+                <input type="hidden" name="form_type" value="formConf">
+            </form> 
+            {% endfor %}
+    </table>    
+{% else %}
+        <p style="color:red"> У списку не має записаних авторів </p>       
+        {% endif %}
+
+
+{% endblock %}

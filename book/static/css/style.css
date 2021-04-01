@@ -1,0 +1,61 @@
+.footer {
+	border-top: 1px solid #dee2e6 !important;
+	padding: 15px 0;
+	bottom: 0;
+	position: relative;
+	width: 100%;
+	margin-top: 50px;
+	height: 50px;
+}
+#field {
+	margin-bottom:10px;
+}
+.b_author {
+	margin-top: -6px;
+	border-radius: 0;
+}
+.tr_1 {
+	width: 20%;
+	padding-left:10px;
+}
+.tr_2 {
+	background-color:aliceblue; 
+	width: 80px; 
+	text-align: center;
+}
+.tr_3 {
+	width: 30%;
+	padding-left:10px;
+}
+.tr_4 {
+	background-color:aliceblue; 
+	padding-left:10px;
+}
+.order_button {
+	max-width: 120px;
+	margin: auto;
+	position: absolute;
+	right: 80px;
+	z-index: 999;
+	border-radius: 0;
+}
+.notification {
+	position: fixed;
+	bottom: 0;
+	z-index: 9999;
+	width: 100%;
+	left: 0;
+	padding: 15px 10%;
+	margin: 0;
+	font-weight: 500;
+	font-size: 20px;
+	box-shadow: 0 0 5px rgba(60, 66, 60, 0.5);
+}
+.notification-hover {
+	bottom: -200px;
+	opacity: 0;
+	transition-duration: 1s;
+}
+.errorlist li{
+	text-decoration: none;
+}

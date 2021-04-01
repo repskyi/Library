@@ -1,0 +1,50 @@
+{% extends 'style.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<div class="col-md-8 order-md-1" style="margin: auto;  padding-top: 20px">
+  <h2 class="mb-3">{{title}}</h4><br>
+  <form class="needs-validation" method="POST" novalidate="">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-md-4 mb-2">
+        {{ form.first_name.label }}
+        {{ form.first_name }}
+      </div>
+      <div class="col-md-4 mb-2">
+        {{ form.middle_name.label }}
+        {{ form.middle_name }}
+      </div>
+      <div class="col-md-4 mb-2">
+        {{ form.last_name.label }}
+        {{ form.last_name }}
+      </div>
+    </div>
+
+    <div class="col-md-12  order-md-1" style="margin: auto; padding: 20px 0">
+      {{ form.email.label }}
+      {{ form.email }}
+    </div>
+    <div class="col-md-12  order-md-1" style="margin: auto; padding-top: 20px">
+    <div class="row">
+      <div class="col-md-6 mb-3" style="padding: 0">
+        <p>{{ form.password1.label }}
+          {{ form.password1 }}</p>
+        <p>{{ form.password2.label }}
+            {{ form.password2 }}</p>
+
+    </div>
+    <div class="col-md-6 mb-3" style="padding: 0">
+      <ul><li>Your password can’t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can’t be a commonly used password.</li><li>Your password can’t be entirely numeric.</li></ul>
+    </div>
+    </div>
+   </div>
+
+    <button class="btn btn-primary btn-lg btn-block" style="max-width: 200px; margin:auto" type="submit">Sign up</button>
+  </form>
+</div>
+{% endblock %}
