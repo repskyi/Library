@@ -32,7 +32,7 @@
             <button class="btn  btn-{% if el.count  == 0 %}secondary{% else %}primary{% endif %} btn-primary btn-sm btn-block order_button" {% if el.count  == 0 %}disabled{% endif %} type="submit">{% if el.count  == 0 %}Not available{% else %}Order Book{% endif %}</button>
             
             {% for order in Ordered %}
-                {% if el.id == order.book_id %}
+                {% if el.id == order.book_id and request.user.id == order.user_id %}
                     <button class="btn btn-success btn-sm btn-block order_button" style="opacity: 1; margin-top: 0px;" type="submit" disabled>In order</button>
                 {% endif %}
             {% endfor %}

@@ -20,7 +20,7 @@ def addAuthors(request):
         
         if name != "" and surname != "" and patronymic != "":
             Author.create(name, surname, patronymic)
-            messages.success(request, 'The author has been added')
+            messages.info(request, 'The author has been added')
             return redirect('addAuthors')
         else:
             messages.error(request, 'An error occurred while adding. Please try again')
@@ -58,7 +58,7 @@ def updateAuthors(request, id):
         patronymic = request.POST.get('patronymic') 
         author = Author.get_by_id(id)
         author.update(name, surname, patronymic)
-        messages.success(request, 'The author has been change')
+        messages.warning(request, 'The author has been change')
      else:
         messages.error(request, f'Something went wrong {name} {surname} {patronymic}')
 
