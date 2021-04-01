@@ -7,7 +7,7 @@ from .models import CustomUser
 
 class CreateUserForm(UserCreationForm):
     password1 = forms.CharField(
-            label='Confirm password:', 
+            label='Password:', 
             widget=forms.PasswordInput(attrs={'class':'form-control mb-2', 'placeholder':'**********'}))  
     password2 = forms.CharField(
             label='Confirm password:', 
