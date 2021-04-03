@@ -29,16 +29,16 @@
                 <td>Patronymic</td>
             </tr>
             {% for el in Authors %}
+            <tr style="padding:10px;border-bottom: 1px dotted grey;">
             {% if edit == el.id %}
                 <form method="POST" action="{% url 'updateAuthors' el.id %}">
                 {% csrf_token %}    
                 <td><input type="text" name="name" maxlength="20" class="form-control" value="{{ el.name }}"></td>
                 <td><input type="text" name="surname" maxlength="20" class="form-control" value="{{ el.surname }}"></td>
                 <td><input type="text" name="patronymic" maxlength="20" class="form-control" value="{{ el.patronymic }}"></td>
-                <td style="width:100px"><button class="btn btn-warning btn-sm btn-block" name="edit_items" value="True" type="submit">Confirm</div></td>
+                <td style="width:100px"><button class="btn btn-success btn-sm btn-block" name="edit_items" value="True" type="submit">Confirm</div></td>
                 </form> 
             {% else %}
-                <tr style="padding:10px;border-bottom: 1px dotted grey;">
                     <td>{{ el.name }}</td>
                     <td>{{ el.surname }}</td>
                     <td>{{ el.patronymic }}</td>

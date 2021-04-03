@@ -20,9 +20,3 @@ class AddAuthorInfo(forms.ModelForm):
             'patronymic': forms.TextInput(attrs={'class':'form-control'}),
         }  
         
-class AddBookInfo(forms.Form):
-    #def __init__(self, name, description, count, *args):
-    #    pass
-    class Meta:
-        model = Book
-        fields = ['name','description','count', 'authors']

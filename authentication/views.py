@@ -1,11 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic.detail import DetailView
 from django.contrib import messages
 
-from django.contrib.auth.views import LoginView
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.backends import BaseBackend
 
 from .forms import *
 from .models import CustomUser

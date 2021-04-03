@@ -6,7 +6,7 @@
 
 {% block content %}
 <h1>{{title}}</h1><br>
-<form class="needs-validation" method="POST" novalidate="">
+<form method="POST" {% if Edit %}action="{% url 'updateBook' Edit.id %}"{% endif %} novalidate="">
   {% csrf_token %}
   <div class="row">
   <div class="col-7">
@@ -14,7 +14,7 @@
 
   <div class="form-row align-items-center">
     <div class="col-8">
-      <input type="text" name="name" maxlength="128" class="form-control mb-2" id="inlineFormInput" >
+      <input type="text" name="name" maxlength="128" class="form-control mb-2" id="inlineFormInput" value="{{Edit.name}}">
     </div>
     <div class="col-4">
       <label class="sr-only" for="inlineFormInputGroup">Book name</label>
@@ -22,12 +22,12 @@
         <div class="input-group-prepend">
           <div class="input-group-text">Counts</div>
         </div>
-        <input type="text" name="count" class="form-control" value="10" id="inlineFormInputGroup" >
+        <input type="number" name="count" class="form-control" min="0" value="{{Edit.count | default:10}}" id="inlineFormInputGroup">
       </div>
     </div>
     <div class="col-12">
       <label for="lastName">Description: <span class="text-muted">(optional)</span></label>
-      <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="5"></textarea>
+      <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="5" value=>{{Edit.description}}</textarea>
     </div>
   </div>
 </div>
@@ -35,6 +35,14 @@
   <label class="mr-sm-2" for="inlineFormCustomSelect">Authors:</label>
   <input type="hidden" name="counts" value="1" />
    <div class="form-group"  id="field">
+    
+    {% if Edit %}
+    {% for auth in Edit.authors.all %} 
+
+    <input class="form-control" type="text" placeholder="Name: {{ auth.name}} {{ auth.surname }}. Patronymic: {{ auth.patronymic }}" readonly>
+
+    {% endfor %}
+    {% else %}
     {% if Authors %}  
           <select class="input form-control" style="width: 80%; display: inline-block;" id="field1" name="author-1">
                       <option>None </option>
@@ -47,9 +55,12 @@
     {% endif %}
     <button type="submit" class="btn add-more btn-primary b_author" style="width: 15%; display: inline-block;">+</button>
 
+    {% endif %}
+
+
   </div>
   <input type="hidden" name="form_type" value="formAdd">
-  <button class="btn btn-primary btn-lg btn-block" style="max-width: 200px; margin:auto" type="submit">Add Book</button>
+  <button class="btn btn-{% if Edit %}outline-warning{% else %}primary{% endif %} btn-lg btn-block" style="max-width: 200px; margin:auto" type="submit">{% if Edit %}Save changes{% else %}Add Book{% endif %}</button>
 </div>
 </div>
 
@@ -92,8 +103,6 @@
                 <td>Description</td>
             </tr>
             {% for el in Book %}
-            <form method="POST">  
-                {% csrf_token %}
                 <tr style="padding:10px;border-bottom: 1px dotted rgb(77, 77, 77);">
                     <td class="tr_1">{{ el.name }}</td>
                     <td class="tr_2">{{ el.count }}</td>
@@ -107,11 +116,18 @@
                       {% endfor %}
                     </td>
                     <td>{{ el.description }}</td>
+                    <form method="POST" action="{% url 'editBooks' el.id %}">  
+                      {% csrf_token %}
+                      <td style="width:50px"><button class="btn btn-warning btn-sm btn-block" name="edit_book" type="submit">Edit</div></td>
+                    </form> 
+                    <form method="POST" action="{% url 'delBook' el.id %}">  
+                      {% csrf_token %}
                     <td style="width:100px"><button class="btn btn-danger btn-sm btn-block" name="delete_items" type="submit">Delete</div></td>
-                </tr>
+                    </form>  
+
+                    </tr>
                 <input type="hidden" name="id" value="{{ el.id }}">
                 <input type="hidden" name="form_type" value="formDel">
-            </form> 
             {% endfor %}
     </table>    
 {% else %}

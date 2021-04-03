@@ -26,9 +26,12 @@
                     <a class="p-2 text-dark" href="{% url 'login' %}">Login</a>
                     <a class="p-2 text-dark" href="{% url 'registration' %}">Registration</a>
                 {% else %}
-                    <a class="btn btn-outline-primary" href="{% url 'addOrders' %}">Orders</a>
+                    <a class="p-2 text-dark" href="../profile">Profile</a>
+                {% if request.user.role == 1 %}    
+                    <a class="p-2 text-dark" href="{% url 'addOrders' %}">Orders</a>
                     <a class="p-2 text-dark" href="{% url 'addBooks' %}">Books</a>
                     <a class="p-2 text-dark" href="{% url 'addAuthors' %}">Authors</a>
+                {% endif %}      
                 {% endif %}  
                 <a class="p-2 text-dark" href="{% url 'home' %}">List</a>
 

@@ -12,7 +12,6 @@ def addAuthors(request):
     
     form = AddAuthorInfo(request.POST or None)
     if request.method == 'POST' and request.POST.get("form_type") == 'formAdd':
-        form = AddAuthorInfo(request.POST)
     
         name = request.POST.get('name') 
         surname = request.POST.get('surname')        
@@ -46,7 +45,7 @@ def editAuthors(request, id):
      if request.method == 'POST':
         author = Author.get_by_id(id)
         authors = Author.objects.order_by('-id')
-        form = AddAuthorInfo()
+        form = AddAuthorInfo(request.POST)
         edit = id
         contex = {'title': 'Authors', 'Authors': authors, 'author':author, 'form': form, 'edit': edit}
         return render(request, 'book/authors.html', contex)
@@ -60,44 +59,7 @@ def updateAuthors(request, id):
         author.update(name, surname, patronymic)
         messages.warning(request, 'The author has been change')
      else:
-        messages.error(request, f'Something went wrong {name} {surname} {patronymic}')
+        messages.error(request, 'Something went wrong')
 
      return redirect('addAuthors')
-    
-
-def addBooks(request):    
-    user = request.user
-    if not user.is_authenticated:
-        return redirect('home')
-    
-    if request.method == 'POST' and request.POST.get("form_type") == 'formAdd':
-        form = AddAuthorInfo(request.POST)
-    
-        name = request.POST.get('name') 
-        description = request.POST.get('description')        
-        count = request.POST.get('count')        
-        authors = []  
-        for el in request.POST:
-            if 'author' in el:
-                authors.append(request.POST.get(el))
-        if name != "" and description != "":
-            if len(authors) >= 1 and authors[0] != 'None':
-                Book.create(name, description, count, authors)
-            else:
-                Book.create(name, description, count)
-            messages.success(request, f'The Book has been added')
-            return redirect('addBooks')
-        else:
-            messages.error(request, 'An error occurred while adding. Please try again')
-    
-    if request.method == 'POST' and request.POST.get("form_type") == 'formDel':
-        id = request.POST.get('id')
-        Book.delete_by_id(id)
-        messages.error(request, 'Book has been removed')
-        return redirect('addBooks')
-        
-    authors = Author.objects.order_by('-id')
-    books = Book.objects.order_by('-id')
-    contex = {'title': 'Books', 'Authors': authors, 'Book': books}
-    return render(request, 'book/books.html', contex)
     

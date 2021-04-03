@@ -1,0 +1,51 @@
+{% extends 'style.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+  <div class="px-0">
+    <h1 class="display-8 font-italic">{{title}}</h1>
+    <p class="lead my-3">{{Book.description}}</p>
+    <p class="lead my-2">Available {{Book.count}} books</p>
+    <p class="lead mb-0">
+      <strong>Authors:</strong><br>
+      {% for auth in Book.authors.all %} 
+        {% for pos in Authors %}
+          {% if auth.id == pos.id %} 
+            <span class="text-grey">Name: {{ pos.name}} {{ pos.surname }}. Patronymic: {{ pos.patronymic }}</span><br>     
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </p>
+  </div>
+</div>
+<h2 style="text-align: center;font-weight: 700;text-transform:uppercase ">Order history</h2><br>
+{% if Orders %}  
+    <table style="width: 100%; margin: auto;">
+            <tr style="border-bottom: 1px dotted grey;">
+                <td class="tr_4" style="text-align: center;">USER</td>
+                <td>end_at</td>
+                <td>plated_end_at</td>
+                <td>created_at</td>
+            </tr>
+            {% for el in Orders %}
+            
+                <tr style="padding:10px;border-bottom: 1px dotted grey; {% if el.end_at %}background-color: #a1ff9e !important;{% endif %} ">
+                    <td class="tr_4" style="width:20%; {% if el.end_at %}background-color: #a1ff9e !important;{% endif %}"><span></span>Email: {{ el.user.email }}<br>
+                    <span>Name: {{ el.user.first_name }}  {{ el.user.second_name }}  {{ el.user.middle_name }}</span>
+                    </td>
+                    <td style="width:20%">{{ el.end_at }}</td>
+                    <td style="width:20%">{{ el.plated_end_at }}</td>
+                    <td style="width:20%">{{ el.created_at }}</td>
+                </tr>
+
+            {% endfor %}
+    </table>    
+{% else %}
+        <p style="color:red"> У базі відсутні дані по цій книзі </p>       
+{% endif %}
+
+{% endblock %}

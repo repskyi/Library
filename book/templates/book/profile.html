@@ -1,0 +1,140 @@
+{% extends 'style.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container bootstrap snippets bootdey">
+<div class="row">
+  <div class="profile-nav col-md-3">
+    <h2>{{title}}</h2>
+      <div class="panel">
+          <div class="user-heading round">
+              <a href="#">
+                  <img src="https://st.depositphotos.com/1779253/5140/v/600/depositphotos_51405259-stock-illustration-male-avatar-profile-picture-use.jpg" alt="">
+              </a><br>
+              <h1>{{ User.first_name }}</h1>
+              <p>{{ User.email }}</p>
+          </div>
+
+          {% if not Edit %}
+          <ul class="nav nav-pills nav-stacked">
+            
+              <li><a href="{% url 'editUser' User.id %}"> <i class="fa fa-edit"></i> Edit profile</a></li>
+          </ul>
+          {% endif %}
+      </div>
+  </div>
+  <div class="profile-info col-md-9">
+    <form method="POST" action="{% url 'updateUser' %}">
+      {% csrf_token %}  
+    <div class="row" style="padding-top: 40px;">
+      <div class="col-md-4 mb-2">
+        <label  for="inlineFormInputGroup">First name:</label>
+        <input type="text" name="first_name" class="form-control" value="{{ User.first_name }}" {% if not Edit %}disabled {% endif %}>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label  for="inlineFormInputGroup">Middle name:</label>
+        <input type="text" name="middle_name" class="form-control" value="{{ User.middle_name }}" {% if not Edit %}disabled {% endif %}>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label  for="inlineFormInputGroup">Last name:</label>
+        <input type="text" name="last_name" class="form-control" value="{{ User.last_name }}" {% if not Edit %}disabled {% endif %}>
+      </div>
+    </div>{% if Edit %}
+    <div class="row" style="margin: auto; padding-top: 10px; width: 80%;">
+      <div class="col-md-6 mb-2">
+        <label  for="inlineFormInputGroup">New password:</label>
+        <input type="password" name="password1" class="form-control" placeholder="***********" >
+      </div>
+      <div class="col-md-6 mb-2">
+        <label  for="inlineFormInputGroup">Confirm password:</label>
+        <input type="password" name="password2" type="text" class="form-control" placeholder="***********" >
+      </div>
+    </div>
+    <div class="row" style="margin: auto; padding-top: 10px; width: 50%;">
+      <div class="col-md-6 mb-2">
+
+        <button class="btn btn-success btn-lg btn-block" style="margin-top:25px;" type="submit" >Save</button>
+        </form>
+  </div>
+    <div class="col-md-6 mb-2">
+      <form method="POST" action="{% url 'userinfo'  %}">
+        {% csrf_token %}  
+    <button class="btn btn-danger btn-lg btn-block" style="margin-top:25px;" type="submit" >Cancel</button>
+  </form>
+
+  </div>
+</div>
+
+    {% endif %}
+    {% if not Edit %}
+      <div class="panel">
+        <h4 style="text-align:center; margin-top: 10px;">Active</h4>
+
+          <div class="bio-graph-heading">
+            {% if Orders %}  
+            <table style="width: 100%; margin: auto;">
+                    <tr style="border-bottom: 1px dotted grey;">
+                        <td >Book</td>
+                        <td>plated_end_at</td>
+                        <td>created_at</td>
+                        <td></td>
+                    </tr>
+                    {% for el in Orders %}
+                      {% if not el.end_at %}
+                        <tr style="padding:10px;border-bottom: 1px dotted grey; {% if el.end_at %}background-color: #a1ff9e !important;{% endif %} ">
+                            <td >{{ el.book.name }}
+                            </td>
+                            <td >{{ el.plated_end_at }}</td>
+                            <td >{{ el.created_at }}</td>
+                            <td >                        
+                              <form method="POST" action="{% url 'closeOrderUser' el.id %}"> 
+                              {% csrf_token %} 
+                              <button class="btn btn-success btn-sm btn-block" name="end_user_order" type="submit">To pass</button>
+                              </form>
+                            </td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                    </table>
+
+                    {% endif%}     
+
+          </div>
+
+      </div>
+      <h4 style="text-align:center; margin-top: 30px;">Closed</h4>
+      {% if Orders %}  
+    <table style="width: 100%; margin: auto;">
+            <tr style="border-bottom: 1px dotted grey;">
+                <td class="tr_4" >Book</td>
+                <td>end_at</td>
+                <td>plated_end_at</td>
+                <td>created_at</td>
+            </tr>
+            {% for el in Orders %}
+              {% if el.end_at %}
+                <tr style="padding:10px;border-bottom: 1px dotted grey; {% if el.end_at %}background-color: #a1ff9e !important;{% endif %} ">
+                    <td class="tr_4" style="width:20%; {% if el.end_at %}background-color: #a1ff9e !important;{% endif %}">{{ el.book.name }}
+                    </td>
+                    <td style="width:20%">{{ el.end_at }}</td>
+                    <td style="width:20%">{{ el.plated_end_at }}</td>
+                    <td style="width:20%">{{ el.created_at }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+    </table>    
+{% else %}
+        <p style="color:red"> У базі відсутні дані про взяті книги </p>       
+{% endif %}
+{% endif %}
+  </div>
+  
+</div>
+
+</div>
+
+{% endblock %}
